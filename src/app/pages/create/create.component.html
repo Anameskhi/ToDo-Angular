@@ -1,1 +1,77 @@
-<p>create works!</p>
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container py-5 h-10">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-5 col-xl-11">
+        <div class="card rounded-3">
+          <div class="card-body p-4">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+  <h3 class="text-center">Create To Do List</h3>
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Title</label>
+    <input  
+    [class.is-invalid]="getTitle?.invalid && getTitle?.touched" 
+    formControlName="title"
+    class="form-control" 
+    placeholder="ToDo Title">
+    <div *ngIf="getTitle?.invalid && getTitle?.touched" class="text-danger">
+      Title is required
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label >Description</label>
+    <textarea  
+     [class.is-invalid]="getDescription?.invalid && getDescription?.touched"
+     formControlName="description"
+     type="" 
+     class="form-control" 
+     placeholder="Description"></textarea>
+    <div *ngIf="getDescription?.invalid && getDescription?.touched" class="text-danger">
+      Desription is required
+    </div>
+  </div>
+
+  <div class="mb-3" style="width:400px" >
+    <label for="dueDate" class="form-label">Deadline</label>
+    <input 
+    [class.is-invalid]="getDeadline?.invalid && getDeadline?.touched" 
+    formControlName="dueDate"
+    style="cursor:pointer"  
+    type="date" 
+    class="form-control" >
+    <div *ngIf="getDeadline?.invalid && getDeadline?.touched" class="text-danger">
+      Deadline is required
+    </div>
+  </div>
+
+  <div class="mb-3" >
+    <label for="">Responsible Person</label>
+  <select  [class.is-invalid]="getResponsiblePersonId?.invalid && getResponsiblePersonId?.touched" 
+           formControlName="responsiblePersonId"
+           class="form-select" 
+           aria-label="Default select example" 
+           style="width:400px">
+<ng-container *ngFor="let person of persons ">   
+   <option  [value]="person.id">{{person.fullName}}</option>
+  </ng-container>
+  </select>
+  <div *ngIf="getResponsiblePersonId?.invalid && getResponsiblePersonId?.touched" class="text-danger">
+    Responsible Person is required
+  </div>
+</div>
+
+<div class="mb-3">
+  <button type="submit" class="btn btn-primary ">{{todoId? 'Update Todo':'Create ToDo'}}</button>
+  <button type="submit" class="btn btn-success ms-2" routerLink="">Back to List</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>

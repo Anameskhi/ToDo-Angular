@@ -10,7 +10,7 @@ export class PersonService {
 
   constructor() { }
 
-  getPersons(id: string | number): Observable<IPerson[]>{
+  getPersons(): Observable<IPerson[]>{
     return of(persons)
   }
   getPerson(id: string | number): Observable<IPerson | undefined>{

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { IPerson } from '../interfaces/person';
 import { ITodo } from '../interfaces/todo';
+import { PersonService } from './person.service';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -12,8 +14,9 @@ export class TodoService {
     return this.storageService.get('todos') || []
   }
   constructor(
-    private storageService: StorageService
-  ) { }
+    private storageService: StorageService,
+    private personService: PersonService
+  ) {}
 
   getTodos(): Observable<ITodo[]>{
     return of(this.todos)
@@ -23,27 +26,37 @@ export class TodoService {
     return of(this.todos.find(todo => todo.id === id))
   }
 
-  addTodo(todo: ITodo): void {
+  addTodo(todo: ITodo): Observable<ITodo> {
     const todos = this.todos;
     todo.id = this.generateId();
-    todo.status = 'pending';
+    todo.status = 'active';
     todo.createdAt = new Date();
     todos.push(todo);
-    this.storageService.set('todos',todos)
+    this.storageService.set('todos',todos);
+    return of(todo)
+
   }
   
-  updateTodoById(id: string | number, todo: ITodo): void{
+  updateTodoById(id: string | number, todo: ITodo): Observable<ITodo>{
     const todos = this.todos;
     const index = todos.findIndex(todo => todo.id === id);
-    todos[index] = todo;
-    this.storageService.set('todo', todos)
-  }
+    todos[index] = {
+      ...todos[index],
+      ...todo
+    };
+    this.storageService.set('todos',todos);
+    return of(todo);
+    };
 
-  deleteTodoById(id: string | number): void{
+
+  
+
+  deleteTodoById(id: string | number): Observable<boolean>{
     const todos = this.todos;
     const index = todos.findIndex(todo => todo.id === id);
     todos.splice(index, 1);
     this.storageService.set('todos', todos)
+    return of(true)
   }
 
 
@@ -51,5 +64,18 @@ export class TodoService {
     return Math.random();
   }
 
+ completeTodoById(id: string | number): Observable<ITodo>{
+  const todos = this.todos;
+  const index = todos.findIndex(todo => todo.id === id);
+  todos[index] = {
+    ...todos[index],
+    status: "completed"
+  };
+
+  this.storageService.set('todos', todos)
+  return of(todos[index])
+}
+ 
 
 }
+

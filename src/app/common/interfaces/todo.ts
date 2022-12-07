@@ -10,6 +10,6 @@ export interface ITodo {
   createdAt: Date
   updatedAt?: Date
   removedAt?: Date
-  responsiblePerson: IPerson
-
+  responsiblePerson?: IPerson
+  responsiblePersonId?: string
 }

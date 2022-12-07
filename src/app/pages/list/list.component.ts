@@ -24,4 +24,18 @@ export class ListComponent implements OnInit {
     })
   }
 
+  complete(id: number){
+    this.todoService.completeTodoById(id)
+    .subscribe(() => {
+      this.getTodos()
+    })
+
+  }
+
+  delete(id: number){
+    this.todoService.deleteTodoById(id)
+    .subscribe(() =>{
+      this.getTodos()
+    })
+  }
 }

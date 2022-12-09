@@ -22,5 +22,8 @@ export class HeaderComponent implements OnInit {
       this.inProgress = this.total - this.completed
     })
   }
- 
+
+  deleteprm(){
+    this.todoService.todos$.next([])
+  }
 }

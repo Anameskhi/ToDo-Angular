@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="mb-3" style="width:400px" >
+  <div class="mb-3 form-group" >
     <label for="dueDate" class="form-label">Deadline</label>
     <input 
     [class.is-invalid]="getDeadline?.invalid && getDeadline?.touched" 
@@ -45,13 +45,13 @@
     </div>
   </div>
 
-  <div class="mb-3" >
+  <div class="mb-3 form-group" >
     <label for="">Responsible Person</label>
   <select  [class.is-invalid]="getResponsiblePersonId?.invalid && getResponsiblePersonId?.touched" 
            formControlName="responsiblePersonId"
            class="form-select" 
            aria-label="Default select example" 
-           style="width:400px">
+           >
 <ng-container *ngFor="let person of persons ">   
    <option  [value]="person.id">{{person.fullName}}</option>
   </ng-container>

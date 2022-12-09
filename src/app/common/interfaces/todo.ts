@@ -1,8 +1,8 @@
-import { TodoStatus } from "../types/todo-status"
-import { IPerson } from "./person"
+import {TodoStatus} from "../types/todo-status";
+import {IPerson} from "./person";
 
 export interface ITodo {
-  id: number
+  id: string
   title: string
   description: string
   status: TodoStatus
@@ -10,6 +10,6 @@ export interface ITodo {
   createdAt: Date
   updatedAt?: Date
   removedAt?: Date
-  responsiblePerson?: IPerson
+  responsiblePerson: IPerson
   responsiblePersonId?: string
 }

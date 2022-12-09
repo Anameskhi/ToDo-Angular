@@ -1,7 +1,7 @@
-export interface IPerson{
-  id: number
+export interface IPerson {
+  id: string | number
   fullName: string
   email: string
   phone: string
-  adress: string
+  address: string
 }

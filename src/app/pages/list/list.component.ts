@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ITodo } from 'src/app/common/interfaces/todo';
-import { TodoService } from 'src/app/common/services/todo.service';
+import {TodoService} from "../../common/services/todo.service";
+import {ITodo} from "../../common/interfaces/todo";
 
 @Component({
   selector: 'app-list',
@@ -9,33 +9,32 @@ import { TodoService } from 'src/app/common/services/todo.service';
 })
 export class ListComponent implements OnInit {
   todos: ITodo[] = []
-
   constructor(
-    private todoService: TodoService
+    private todoService: TodoService,
   ) { }
 
   ngOnInit(): void {
-    this.getTodos()
+    this.getTodos();
   }
 
-  getTodos(){
-    this.todoService.getTodos().subscribe((res)=>{
-      this.todos = res
-    })
+
+  getTodos() {
+    this.todoService.getTodos().subscribe((res) => {
+      this.todos = res;
+    });
   }
 
-  complete(id: number){
-    this.todoService.completeTodoById(id)
-    .subscribe(() => {
-      this.getTodos()
-    })
-
-  }
-
-  delete(id: number){
+  delete(id: string) {
     this.todoService.deleteTodoById(id)
-    .subscribe(() =>{
-      this.getTodos()
-    })
+      .subscribe(() => {
+        this.getTodos()
+      })
+  }
+
+  complete(id: string) {
+    this.todoService.completeTodoById(id)
+      .subscribe(() => {
+        this.getTodos()
+      })
   }
 }

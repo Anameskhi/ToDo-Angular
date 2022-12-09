@@ -1,81 +1,73 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { IPerson } from '../interfaces/person';
-import { ITodo } from '../interfaces/todo';
-import { PersonService } from './person.service';
-import { StorageService } from './storage.service';
+import {ITodo} from "../interfaces/todo";
+import {BehaviorSubject, map, Observable, of} from "rxjs";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
 
-  get todos(): ITodo[]{
-    return this.storageService.get('todos') || []
-  }
-  constructor(
-    private storageService: StorageService,
-    private personService: PersonService
-  ) {}
+  todos$: BehaviorSubject<ITodo[]> = new BehaviorSubject<ITodo[]>([])
 
-  getTodos(): Observable<ITodo[]>{
-    return of(this.todos)
+  getTodos(): Observable<ITodo[]> {
+    return this.todos$.asObservable();
   }
 
-  getTodoById(id: string | number): Observable<ITodo | undefined>{
-    return of(this.todos.find(todo => todo.id === id))
+  getTodoById(id: string | number): Observable<ITodo | undefined> {
+    return this.todos$.pipe(
+      map((todos) => {
+        return todos.find(todo => todo.id === id);
+      })
+    );
   }
 
   addTodo(todo: ITodo): Observable<ITodo> {
-    const todos = this.todos;
+    console.log(todo);
     todo.id = this.generateId();
     todo.status = 'active';
     todo.createdAt = new Date();
-    todos.push(todo);
-    this.storageService.set('todos',todos);
-    return of(todo)
-
+    this.todos$.next([
+      ...this.todos$.getValue(),
+      todo
+    ]);
+    return of(todo);
   }
-  
-  updateTodoById(id: string | number, todo: ITodo): Observable<ITodo>{
-    const todos = this.todos;
+
+
+  updateTodoById(id: string | number, todo: ITodo): Observable<ITodo> {
+
+    const todos = this.todos$.getValue();
     const index = todos.findIndex(todo => todo.id === id);
+    todo.status = 'active';
     todos[index] = {
       ...todos[index],
       ...todo
-    };
-    this.storageService.set('todos',todos);
+    }
+    this.todos$.next(todos);
     return of(todo);
-    };
+  }
 
-
-  
-
-  deleteTodoById(id: string | number): Observable<boolean>{
-    const todos = this.todos;
+  deleteTodoById(id: string | number): Observable<boolean> {
+    const todos = this.todos$.getValue();
     const index = todos.findIndex(todo => todo.id === id);
     todos.splice(index, 1);
-    this.storageService.set('todos', todos)
-    return of(true)
+    this.todos$.next(todos);
+    return of(true);
   }
 
-
-  generateId(): number{
-    return Math.random();
+  completeTodoById(id: string | number): Observable<ITodo> {
+    const todos = this.todos$.getValue();
+    const index = todos.findIndex(todo => todo.id === id);
+    todos[index] = {
+      ...todos[index],
+      status: 'completed'
+    };
+    this.todos$.next(todos);
+    return of(todos[index]);
   }
 
- completeTodoById(id: string | number): Observable<ITodo>{
-  const todos = this.todos;
-  const index = todos.findIndex(todo => todo.id === id);
-  todos[index] = {
-    ...todos[index],
-    status: "completed"
-  };
-
-  this.storageService.set('todos', todos)
-  return of(todos[index])
+  generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
+  }
 }
- 
-
-}
-
